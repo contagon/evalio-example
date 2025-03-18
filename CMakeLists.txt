@@ -30,7 +30,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(Eigen3)
 
-# Similarly, find evalio on system or from python package
+# Similarly, find evalio on system or from the evalio python package
 find_package(evalio REQUIRED)
 # Or pull from git
 # FetchContent_Declare(

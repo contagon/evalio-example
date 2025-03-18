@@ -10,6 +10,8 @@ We recommend using [scikit-core-build](https://scikit-build-core.readthedocs.io/
 
 Once your research/project/etc is completed, we recommend opening a PR to evalio to make your custom pipelines or datasets available to all. This will increase its traction with the community (lower friction -> more likely to be used and cited!) and make them more widely available.
 
+The TL;DR version, a custom dataset can be made via inheriting from the `Dataset` class in python only, and a custom pipeline from inheriting the `Pipeline` class in either C++ or python. These can then be made available to evalio via the `EVALIO_CUSTOM` env variable point to the python module that contains them.
+
 ## Usage
 
 If you are using `uv`, you can build everything in this repo simply by running:
@@ -27,3 +29,12 @@ EVALIO_CUSTOM=evalio_example evalio ls pipelines -q
 EVALIO_CUSTOM=evalio_example evalio ls datasets -q
 ```
 (Noting that `evalio ls ...` may need to be prefixed with `uv run evalio ls ...`  if the `uv` environment is not active.) These pipelines and datasets can then be used in the same way as any other evalio pipeline or dataset.
+
+## Finding evalio in CMake
+
+If you are looking to add a custom pipeline, the header-only C++ library is included in the python package, and can be found via,
+```cmake
+find_package(evalio REQUIRED)
+target_link_libraries(my_target PRIVATE evalio)
+```
+Alternatively, the library can be pulled via CMake's `FetchContent` module. See the [CMakeLists.txt](CMakeLists.txt) for an example.
