@@ -11,14 +11,14 @@ include(FetchContent)
 set(PYBIND11_FINDPYTHON ON)
 
 # Find pybind either on system, or in the python venv
-# find_package(pybind11 CONFIG REQUIRED)
+find_package(pybind11 CONFIG REQUIRED)
 # Alternatively, pull from git
-FetchContent_Declare(
-    pybind11
-    GIT_REPOSITORY https://github.com/pybind/pybind11.git
-    GIT_TAG v2.13.6
-)
-FetchContent_MakeAvailable(pybind11)
+# FetchContent_Declare(
+#     pybind11
+#     GIT_REPOSITORY https://github.com/pybind/pybind11.git
+#     GIT_TAG v2.13.6
+# )
+# FetchContent_MakeAvailable(pybind11)
 
 # Also need to find eigen
 FetchContent_Declare(
@@ -31,15 +31,15 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(Eigen3)
 
 # Similarly, find evalio on system or from python package
-# find_package(evalio REQUIRED)
+find_package(evalio REQUIRED)
 # Or pull from git
-FetchContent_Declare(
-    evalio
-    GIT_REPOSITORY https://github.com/contagon/evalio.git
-    GIT_TAG "python-cmake"
-)
-FetchContent_MakeAvailable(evalio)
+# FetchContent_Declare(
+#     evalio
+#     GIT_REPOSITORY https://github.com/contagon/evalio.git
+#     GIT_TAG "master"
+# )
+# FetchContent_MakeAvailable(evalio)
 
-pybind11_add_module(_core MODULE src/CppPipeline.cpp)
+pybind11_add_module(_core MODULE src/evalio_example/CppPipeline.cpp)
 target_link_libraries(_core PRIVATE evalio)
 install(TARGETS _core DESTINATION ${SKBUILD_PROJECT_NAME})
