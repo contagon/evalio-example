@@ -20,7 +20,7 @@ minimum-version = "build-system.requires"
 build-dir = "build/{wheel_tag}"
 
 [tool.scikit-build.cmake.define]
-CMAKE_FIND_DEBUG_MODE = "ON"
+CMAKE_BUILD_TYPE = "Release"
 
 # local development
 [tool.uv.sources]

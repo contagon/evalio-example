@@ -8,3 +8,7 @@ wheels/
 
 # Virtual environments
 .venv
+
+# misc caches
+.cache/
+compile_commands.json

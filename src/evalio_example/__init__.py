@@ -1,5 +1,5 @@
-from evalio_example._core import hello_from_bin
+from evalio_example._core import MyCppPipeline  # type: ignore
+from evalio_example.RawDataset import MyRawDataset
+from evalio_example.RosDataset import MyRosbagDataset
 
-
-def main() -> None:
-    print(hello_from_bin())
+__all__ = ["MyCppPipeline", "MyRawDataset", "MyRosbagDataset"]
