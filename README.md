@@ -16,7 +16,10 @@ If you are using `uv`, you can build everything in this repo simply by running:
 ```bash
 uv sync
 ```
-and the `evalio_example` package will be built and installed in the current environment. No other dependencies are required!
+and the `evalio_example` package will be built and installed in the current environment. No other dependencies are required! If using another python package manager, the following *should* do the same,
+```bash
+pip install -e .
+``` 
 
 Then, adding in these additional pipelines and datasets to evalio can be done using the `EVALIO_CUSTOM` environment variable with the python module containing the custom objects. Multiple modules can be comma separated. For example, to list our custom pipelines and datasets, you can run:
 ```bash
