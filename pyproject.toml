@@ -1,0 +1,27 @@
+[project]
+name = "evalio-example"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [{ name = "Easton Potokar", email = "contagon6@gmail.com" }]
+requires-python = ">=3.12"
+dependencies = ["evalio"]
+
+[project.scripts]
+evalio-example = "evalio_example:main"
+# -------------- Tools -------------- #
+# building
+[build-system]
+requires = ["scikit-build-core>=0.10", "pybind11", "evalio"]
+build-backend = "scikit_build_core.build"
+
+[tool.scikit-build]
+minimum-version = "build-system.requires"
+build-dir = "build/{wheel_tag}"
+
+[tool.scikit-build.cmake.define]
+CMAKE_FIND_DEBUG_MODE = "ON"
+
+# local development
+[tool.uv.sources]
+evalio = { path = "../evalio" }
