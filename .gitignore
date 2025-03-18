@@ -10,5 +10,6 @@ wheels/
 .venv
 
 # misc caches
-.cache/
+.cache
+.clangd
 compile_commands.json

@@ -47,7 +47,7 @@ class MyRosbagDataset(Dataset):
 
     @staticmethod
     def url() -> str:
-        return "github.com/contagon/evalio-example"
+        return "https://github.com/contagon/evalio-example"
 
     def imu_T_lidar(self) -> SE3:
         return SE3.identity()

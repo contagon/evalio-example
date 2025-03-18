@@ -2,6 +2,7 @@
 #include "evalio/types.h"
 
 #include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 
 namespace py = pybind11;
 
@@ -10,10 +11,10 @@ public:
   MyCppPipeline() : evalio::Pipeline() {}
 
   // custom params
-  bool param_one = true;
-  int param_two = 2;
-  double param_three = 3.0;
-  std::string param_four = "four";
+  bool param1 = true;
+  int param2 = 2;
+  double param3 = 3.0;
+  std::string param4 = "four";
 
   // sensor params
   int scanlines = 0;
@@ -29,19 +30,26 @@ public:
 
   // ------------------------- Info ------------------------- //
   static std::string name() { return "MyCppPipeline"; }
-  static std::string url() { return "github.com/contagon/evalio-example"; }
+
+  static std::string url() {
+    return "https://github.com/contagon/evalio-example";
+  }
+
   static std::map<std::string, evalio::Param> default_params() {
     return {
-        {"param_one", true},
-        {"param_two", 2},
-        {"param_three", 3.0},
-        {"param_four", "four"},
+        {"param1", true},
+        {"param2", 2},
+        {"param3", 3.0},
+        // Make sure to wrap strings in std::string
+        // Otherwise pybind11 will parse as a char* and coerce it into a bool
+        {"param4", std::string("four")},
     };
   }
 
   // ------------------------- Getters ------------------------- //
   // Returns the most recent pose estimate
   const evalio::SE3 pose() override { return current_pose; }
+
   // Returns the current submap of the environment
   const std::vector<evalio::Point> map() override { return {}; }
 
@@ -50,24 +58,27 @@ public:
   void set_imu_params(evalio::ImuParams params) override {
     imu_gyro_std = params.gyro;
   }
+
   // Set the LiDAR parameters
   void set_lidar_params(evalio::LidarParams params) override {
     scanlines = params.num_rows;
     columns = params.num_columns;
   }
+
   // Set the transformation from IMU to LiDAR
   void set_imu_T_lidar(evalio::SE3 T) override { imu_T_lidar = T; }
+
   // Set the custom parameters
   void set_params(std::map<std::string, evalio::Param> params) override {
     for (auto &[key, value] : params) {
-      if (key == "param_one") {
-        param_one = std::get<bool>(value);
-      } else if (key == "param_two") {
-        param_two = std::get<int>(value);
-      } else if (key == "param_three") {
-        param_three = std::get<double>(value);
-      } else if (key == "param_four") {
-        param_four = std::get<std::string>(value);
+      if (key == "param1") {
+        param1 = std::get<bool>(value);
+      } else if (key == "param2") {
+        param2 = std::get<int>(value);
+      } else if (key == "param3") {
+        param3 = std::get<double>(value);
+      } else if (key == "param4") {
+        param4 = std::get<std::string>(value);
       } else {
         throw std::invalid_argument("Invalid parameter: " + key);
       }
