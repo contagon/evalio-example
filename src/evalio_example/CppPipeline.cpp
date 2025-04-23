@@ -1,10 +1,12 @@
 #include "evalio/pipeline.h"
 #include "evalio/types.h"
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/map.h>
+#include <nanobind/stl/string.h>
+#include <nanobind/stl/variant.h>
 
-namespace py = pybind11;
+namespace nb = nanobind;
 
 class MyCppPipeline : public evalio::Pipeline {
 public:
@@ -104,15 +106,15 @@ public:
   }
 };
 
-PYBIND11_MODULE(_core, m) {
+NB_MODULE(_core, m) {
   m.doc() = "Custom evalio pipeline example";
 
-  py::module evalio = py::module::import("evalio");
+  nb::module_ evalio = nb::module_::import_("evalio");
 
   // Only have to override the static methods here
   // All the others will be automatically inherited from the base class
-  py::class_<MyCppPipeline, evalio::Pipeline>(m, "MyCppPipeline")
-      .def(py::init<>())
+  nb::class_<MyCppPipeline, evalio::Pipeline>(m, "MyCppPipeline")
+      .def(nb::init<>())
       .def_static("name", &MyCppPipeline::name)
       .def_static("url", &MyCppPipeline::url)
       .def_static("default_params", &MyCppPipeline::default_params);

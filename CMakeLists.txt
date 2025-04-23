@@ -6,19 +6,24 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 include(FetchContent)
 
-# Use new cmake FindPython
-# https://pybind11.readthedocs.io/en/stable/cmake/#new-findpython-mode
-set(PYBIND11_FINDPYTHON ON)
+# Find python
+find_package(
+    Python
+    3.11
+    REQUIRED
+    COMPONENTS Interpreter Development.Module
+    OPTIONAL_COMPONENTS Development.SABIModule
+)
 
-# Find pybind either on system, or in the python venv
-find_package(pybind11 CONFIG REQUIRED)
+# Find pybind either on system or in the python venv
+find_package(nanobind CONFIG REQUIRED)
 # Alternatively, pull from git
 # FetchContent_Declare(
-#     pybind11
-#     GIT_REPOSITORY https://github.com/pybind/pybind11.git
-#     GIT_TAG v2.13.6
+#     nanobind
+#     GIT_REPOSITORY https://github.com/wjakob/nanobind
+#     GIT_TAG v2.7.0
 # )
-# FetchContent_MakeAvailable(pybind11)
+# FetchContent_MakeAvailable(nanobind)
 
 # Also need to find eigen
 FetchContent_Declare(
@@ -40,6 +45,6 @@ find_package(evalio REQUIRED)
 # )
 # FetchContent_MakeAvailable(evalio)
 
-pybind11_add_module(_core MODULE src/evalio_example/CppPipeline.cpp)
+nanobind_add_module(_core src/evalio_example/CppPipeline.cpp)
 target_link_libraries(_core PRIVATE evalio)
 install(TARGETS _core DESTINATION ${SKBUILD_PROJECT_NAME})
