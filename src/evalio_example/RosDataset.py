@@ -7,8 +7,6 @@ from evalio.datasets.loaders import (
     LidarPointStamp,
     LidarStamp,
     RosbagIter,
-    load_tum,
-    load_pose_csv,
 )
 from evalio.types import Trajectory, SE3, ImuParams, LidarParams
 
@@ -38,9 +36,9 @@ class MyRosbagDataset(Dataset):
         )
 
     def ground_truth_raw(self) -> Trajectory:
-        return load_tum(self.folder / "ground_truth.txt")
+        return Trajectory.from_tum(self.folder / "ground_truth.txt")
         # This is an alias for the following,
-        return load_pose_csv(
+        return Trajectory.from_csv(
             self.folder / "ground_truth.txt",
             ["sec", "x", "y", "z", "qx", "qy", "qz", "qw"],
         )

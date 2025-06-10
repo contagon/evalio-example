@@ -5,15 +5,13 @@ description = "Simple example of making custom datasets and pipelines for evalio
 readme = "README.md"
 authors = [{ name = "Easton Potokar", email = "contagon6@gmail.com" }]
 requires-python = ">=3.11"
-dependencies = [
-    "evalio>=0.2.0",
-]
+dependencies = ["evalio>=0.3.0"]
 
 # -------------- Tools -------------- #
 # building
 [build-system]
 # makes nanobind and evalio both available at configure time
-requires = ["scikit-build-core>=0.10", "nanobind", "evalio>=0.2.0"]
+requires = ["scikit-build-core>=0.10", "nanobind", "evalio>=0.3.0"]
 build-backend = "scikit_build_core.build"
 
 [tool.scikit-build]
@@ -22,6 +20,3 @@ build-dir = "build/{wheel_tag}"
 
 [tool.scikit-build.cmake.define]
 CMAKE_BUILD_TYPE = "Release"
-
-[tool.uv.sources]
-evalio = { path = "evalio-0.2.0-cp311-cp311-manylinux_2_28_x86_64.whl" }

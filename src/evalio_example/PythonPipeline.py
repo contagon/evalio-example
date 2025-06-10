@@ -1,3 +1,4 @@
+from typing import Mapping
 from evalio.pipelines import Pipeline
 from evalio.types import (
     SE3,
@@ -65,7 +66,7 @@ class MyPythonPipeline(Pipeline):
     def set_imu_T_lidar(self, T: SE3) -> None:
         self.imu_T_lidar = T
 
-    def set_params(self, params: dict[str, bool | int | float | str]) -> None:
+    def set_params(self, params: Mapping[str, bool | int | float | str]) -> None:
         for key, value in params.items():
             match key:
                 case "param1":

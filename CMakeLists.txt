@@ -25,16 +25,6 @@ find_package(nanobind CONFIG REQUIRED)
 # )
 # FetchContent_MakeAvailable(nanobind)
 
-# Also need to find eigen
-FetchContent_Declare(
-    Eigen3
-    GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
-    GIT_TAG 3.4.0
-    FIND_PACKAGE_ARGS
-        NO_MODULE # uses find_package first, git if it fails
-)
-FetchContent_MakeAvailable(Eigen3)
-
 # Similarly, find evalio on system or from the evalio python package
 find_package(evalio REQUIRED)
 # Or pull from git
@@ -44,6 +34,16 @@ find_package(evalio REQUIRED)
 #     GIT_TAG "master"
 # )
 # FetchContent_MakeAvailable(evalio)
+
+# Also need to find eigen
+FetchContent_Declare(
+    Eigen3
+    GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
+    GIT_TAG 3.4.0
+    FIND_PACKAGE_ARGS
+        NO_MODULE # uses find_package first, git if it fails
+)
+FetchContent_MakeAvailable(Eigen3)
 
 nanobind_add_module(_core src/evalio_example/CppPipeline.cpp)
 target_link_libraries(_core PRIVATE evalio)
