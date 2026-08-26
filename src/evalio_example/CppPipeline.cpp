@@ -49,11 +49,8 @@ public:
   }
 
   // ------------------------- Getters ------------------------- //
-  // Returns the most recent pose estimate
-  const evalio::SE3 pose() override { return current_pose; }
-
   // Returns the current submap of the environment
-  const std::vector<evalio::Point> map() override { return {}; }
+  const evalio::Map<> map() override { return {}; }
 
   // ------------------------- Setters ------------------------- //
   // Set the IMU parameters
@@ -71,20 +68,33 @@ public:
   void set_imu_T_lidar(evalio::SE3 T) override { imu_T_lidar = T; }
 
   // Set the custom parameters
-  void set_params(std::map<std::string, evalio::Param> params) override {
-    for (auto &[key, value] : params) {
-      if (key == "param1") {
-        param1 = std::get<bool>(value);
-      } else if (key == "param2") {
-        param2 = std::get<int>(value);
-      } else if (key == "param3") {
-        param3 = std::get<double>(value);
-      } else if (key == "param4") {
-        param4 = std::get<std::string>(value);
-      } else {
-        throw std::invalid_argument("Invalid parameter: " + key);
-      }
+  std::map<std::string, evalio::Param>
+  set_params(std::map<std::string, evalio::Param> params) override {
+    auto p1 = params.find("param1");
+    if (p1 != params.end()) {
+      param1 = std::get<bool>(p1->second);
+      params.erase(p1);
     }
+
+    auto p2 = params.find("param2");
+    if (p2 != params.end()) {
+      param2 = std::get<int>(p2->second);
+      params.erase(p2);
+    }
+
+    auto p3 = params.find("param3");
+    if (p3 != params.end()) {
+      param3 = std::get<double>(p3->second);
+      params.erase(p3);
+    }
+
+    auto p4 = params.find("param4");
+    if (p4 != params.end()) {
+      param4 = std::get<std::string>(p4->second);
+      params.erase(p4);
+    }
+
+    return params;
   }
 
   // ------------------------- Doers ------------------------- //
@@ -100,9 +110,9 @@ public:
   }
 
   // Add a LiDAR measurement
-  std::vector<evalio::Point> add_lidar(evalio::LidarMeasurement mm) override {
-    // Do something with the LiDAR measurement
-    return {};
+  void add_lidar(evalio::LidarMeasurement mm) override {
+    // Save a pose estimate for this timestamp
+    save(mm.stamp, current_pose);
   }
 };
 
