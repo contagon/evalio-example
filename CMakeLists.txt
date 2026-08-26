@@ -15,17 +15,17 @@ find_package(
     OPTIONAL_COMPONENTS Development.SABIModule
 )
 
-# Find pybind either on system or in the python venv
+# Find nanobind either on the system or in the Python environment.
 find_package(nanobind CONFIG REQUIRED)
 # Alternatively, pull from git
 # FetchContent_Declare(
 #     nanobind
 #     GIT_REPOSITORY https://github.com/wjakob/nanobind
-#     GIT_TAG v2.7.0
+#     GIT_TAG v2.13.0
 # )
 # FetchContent_MakeAvailable(nanobind)
 
-# Similarly, find evalio on system or from the evalio python package
+# Similarly, find evalio on the system or from the evalio Python package.
 find_package(evalio REQUIRED)
 # Or pull from git
 # FetchContent_Declare(

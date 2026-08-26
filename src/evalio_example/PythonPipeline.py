@@ -1,7 +1,9 @@
-from typing import Mapping
+from collections.abc import Mapping
+
 from evalio.pipelines import Pipeline
 from evalio.types import (
     SE3,
+    Param,
     Point,
     ImuParams,
     LidarParams,
@@ -11,7 +13,7 @@ from evalio.types import (
 
 
 class MyPythonPipeline(Pipeline):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.param_one = True
@@ -32,8 +34,12 @@ class MyPythonPipeline(Pipeline):
 
     # ------------------------- Info ------------------------- #
     @staticmethod
-    def name():
+    def name() -> str:
         return "MyPythonPipeline"
+
+    @staticmethod
+    def version() -> str:
+        return "0.1.0"
 
     @staticmethod
     def url() -> str:
@@ -49,11 +55,8 @@ class MyPythonPipeline(Pipeline):
         }
 
     # ------------------------- Getters ------------------------- #
-    def pose(self) -> SE3:
-        return self.current_pose
-
-    def map(self) -> list[Point]:
-        return []
+    def map(self) -> dict[str, list[Point]]:
+        return {}
 
     # ------------------------- Setters ------------------------- #
     def set_imu_params(self, params: ImuParams) -> None:
@@ -66,7 +69,8 @@ class MyPythonPipeline(Pipeline):
     def set_imu_T_lidar(self, T: SE3) -> None:
         self.imu_T_lidar = T
 
-    def set_params(self, params: Mapping[str, bool | int | float | str]) -> None:
+    def set_params(self, params: Mapping[str, Param]) -> dict[str, Param]:
+        unused: dict[str, Param] = {}
         for key, value in params.items():
             match key:
                 case "param1":
@@ -77,6 +81,9 @@ class MyPythonPipeline(Pipeline):
                     self.param_three = value
                 case "param4":
                     self.param_four = value
+                case _:
+                    unused[key] = value
+        return unused
 
     # ------------------------- Doers ------------------------- #
     def initialize(self) -> None:
@@ -85,5 +92,5 @@ class MyPythonPipeline(Pipeline):
     def add_imu(self, mm: ImuMeasurement) -> None:
         pass
 
-    def add_lidar(self, mm: LidarMeasurement) -> list[Point]:
-        return []
+    def add_lidar(self, mm: LidarMeasurement) -> None:
+        self.save(mm.stamp, self.current_pose)
