@@ -25,7 +25,8 @@ class MyRosbagDataset(Dataset):
             imu_topic="/imu",
             lidar_topic="/lidar",
             lidar_params=self.lidar_params(),
-            # These are optional - evalio will do it's best to guess row/column major and only_valid/all points
+            # Set the format explicitly so evalio can standardize scans reliably.
+            # Guess has evalio do best-effort inference
             # These are the defaults
             lidar_format=LidarFormatParams(
                 major=LidarMajor.Row,
@@ -73,8 +74,8 @@ class MyRosbagDataset(Dataset):
         )
 
     def files(self) -> list[str]:
-        # Lists what files should be in self.folder to check if dataset is downloaded
-        return ["first_trajectory.bag", "second_trajectory.bag"]
+        # Files consumed by data_iter() and ground_truth_raw().
+        return ["temp.bag", "ground_truth.txt"]
 
     def download(self) -> None:
         # Implement an automatic downloader

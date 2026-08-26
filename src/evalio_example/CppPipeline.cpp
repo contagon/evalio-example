@@ -2,6 +2,9 @@
 #include "evalio/types.h"
 
 #include <nanobind/nanobind.h>
+
+#include <map>
+#include <string>
 #include <nanobind/stl/map.h>
 #include <nanobind/stl/string.h>
 #include <nanobind/stl/variant.h>
@@ -33,6 +36,8 @@ public:
   // ------------------------- Info ------------------------- //
   static std::string name() { return "MyCppPipeline"; }
 
+  static std::string version() { return "0.1.0"; }
+
   static std::string url() {
     return "https://github.com/contagon/evalio-example";
   }
@@ -43,7 +48,7 @@ public:
         {"param2", 2},
         {"param3", 3.0},
         // Make sure to wrap strings in std::string
-        // Otherwise pybind11 will parse as a char* and coerce it into a bool
+        // Otherwise nanobind will parse a char* and coerce it into a bool
         {"param4", std::string("four")},
     };
   }
@@ -120,12 +125,15 @@ NB_MODULE(_core, m) {
   m.doc() = "Custom evalio pipeline example";
 
   nb::module_ evalio = nb::module_::import_("evalio");
+  // Lets evalio verify that this module uses a compatible nanobind ABI.
+  m.def("abi_tag", []() { return nb::detail::abi_tag(); });
 
   // Only have to override the static methods here
   // All the others will be automatically inherited from the base class
   nb::class_<MyCppPipeline, evalio::Pipeline>(m, "MyCppPipeline")
       .def(nb::init<>())
       .def_static("name", &MyCppPipeline::name)
+      .def_static("version", &MyCppPipeline::version)
       .def_static("url", &MyCppPipeline::url)
       .def_static("default_params", &MyCppPipeline::default_params);
 }

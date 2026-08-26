@@ -32,7 +32,8 @@ EVALIO_CUSTOM=evalio_example evalio ls datasets -q
 
 ## Finding evalio in CMake
 
-If you are looking to add a custom pipeline, the header-only C++ library is included in the python package, and can be found via,
+The header-only C++ library is included in the Python package and can be found with:
+
 ```cmake
 find_package(evalio REQUIRED)
 target_link_libraries(my_target PRIVATE evalio)

@@ -23,24 +23,28 @@ class MyRawDataset(Dataset):
     def data_iter(self) -> DatasetIterator:
         # make some fake data
         imu_data = np.random.rand(100, 6)
-        imu_stamps = [Stamp.from_sec(x / 100) for x in range(100)]
-        imu_data = [
-            ImuMeasurement(s, g, a)
-            for s, g, a in zip(imu_stamps, imu_data[:3], imu_data[3:])
-        ]
+        imu_stamps = (Stamp.from_sec(x / 100) for x in range(100))
+        imu_iter = (
+            ImuMeasurement(stamp, gyro, accel)
+            for stamp, gyro, accel in zip(
+                imu_stamps,
+                imu_data[:, :3],
+                imu_data[:, 3:],
+                strict=True,
+            )
+        )
 
         def lidar_iter():
             for i in range(10):
                 yield LidarMeasurement(Stamp.from_sec(i / 10))
 
-        # RawDataIter takes in two iterators and interleaves the measurements as needed
-        # This allows some flexibility in how the data is loaded (ie it doesn't have to be loaded all at once)
-        # Thus you don't have to load all lidar scans at once
+        # RawDataIter takes two iterators and interleaves measurements by timestamp.
+        # This keeps data loading lazy, so scans do not need to be loaded all at once.
         # See HeLiPR for an example
         # https://github.com/contagon/evalio/blob/master/python/evalio/datasets/helipr.py#L40-L68
         return RawDataIter(
             lidar_iter(),
-            iter(imu_data),
+            imu_iter,
             10,
         )
 
@@ -82,8 +86,8 @@ class MyRawDataset(Dataset):
         )
 
     def files(self) -> list[str]:
-        # Lists what files should be in self.folder to check if dataset is downloaded
-        return ["first_trajectory.bag", "second_trajectory.bag"]
+        # Generated data requires no downloaded files.
+        return []
 
     def download(self) -> None:
         # Implement an automatic downloader

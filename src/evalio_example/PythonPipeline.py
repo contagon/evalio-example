@@ -1,4 +1,5 @@
-from typing import Mapping
+from collections.abc import Mapping
+
 from evalio.pipelines import Pipeline
 from evalio.types import (
     SE3,
@@ -12,7 +13,7 @@ from evalio.types import (
 
 
 class MyPythonPipeline(Pipeline):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.param_one = True
@@ -33,8 +34,12 @@ class MyPythonPipeline(Pipeline):
 
     # ------------------------- Info ------------------------- #
     @staticmethod
-    def name():
+    def name() -> str:
         return "MyPythonPipeline"
+
+    @staticmethod
+    def version() -> str:
+        return "0.1.0"
 
     @staticmethod
     def url() -> str:
